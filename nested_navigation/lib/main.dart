@@ -72,15 +72,16 @@ class SetupFlowScreen extends StatefulWidget {
 }
 
 class _SetupFlowScreenState extends State<SetupFlowScreen> {
-  // Kunci untuk Navigator bersarang
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  // Fungsi untuk navigasi ke ConnectDeviceScreen
   void _onDeviceFound() {
     _navigatorKey.currentState!.pushNamed('connect_device');
   }
 
-  // Fungsi untuk menyelesaikan alur pengaturan
+  void _onDeviceConnected() {
+    _navigatorKey.currentState!.pushNamed('confirm_device');
+  }
+
   void _completeSetup(BuildContext context) {
     Navigator.pop(context); // Kembali ke HomeScreen
   }
@@ -91,7 +92,6 @@ class _SetupFlowScreenState extends State<SetupFlowScreen> {
       appBar: AppBar(
         title: const Text('Setup Flow'),
         centerTitle: true,
-        // Tombol kembali untuk keluar dari SetupFlow
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -107,7 +107,10 @@ class _SetupFlowScreenState extends State<SetupFlowScreen> {
               page = FindDevicesScreen(onDeviceFound: _onDeviceFound);
               break;
             case 'connect_device':
-              page = ConnectDeviceScreen(onSetupComplete: () => _completeSetup(context));
+              page = ConnectDeviceScreen(onSetupComplete: _onDeviceConnected);
+              break;
+            case 'confirm_device':
+              page = ConfirmDeviceScreen(onFinish: () => _completeSetup(context));
               break;
             default:
               page = FindDevicesScreen(onDeviceFound: _onDeviceFound);
@@ -173,7 +176,7 @@ class ConnectDeviceScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               textStyle: const TextStyle(fontSize: 16),
             ),
-            child: const Text('Complete Setup'),
+            child: const Text('Proceed to Confirmation'),
           ),
           const SizedBox(height: 10),
           ElevatedButton(
@@ -185,6 +188,37 @@ class ConnectDeviceScreen extends StatelessWidget {
               textStyle: const TextStyle(fontSize: 16),
             ),
             child: const Text('Back'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Layar Konfirmasi Perangkat (ConfirmDeviceScreen)
+class ConfirmDeviceScreen extends StatelessWidget {
+  final VoidCallback onFinish;
+
+  const ConfirmDeviceScreen({super.key, required this.onFinish});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Confirm Device Settings',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: onFinish,
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              textStyle: const TextStyle(fontSize: 16),
+            ),
+            child: const Text('Finish Setup'),
           ),
         ],
       ),

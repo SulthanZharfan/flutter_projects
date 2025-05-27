@@ -15,12 +15,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // Definisi named routes
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
         '/detail': (context) => const DetailScreen(data: 'Hello from Home!'),
         '/settings': (context) => const SettingsScreen(username: 'Guest'),
+        '/infopengguna': (context) => const InfoPengguna(), // ✅ route baru
       },
     );
   }
@@ -41,7 +41,6 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Tombol untuk navigasi dasar
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -51,35 +50,29 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 16),
-              ),
               child: const Text('Go to Detail (Push)'),
             ),
             const SizedBox(height: 20),
-            // Tombol untuk named route ke DetailScreen
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/detail');
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 16),
-              ),
               child: const Text('Go to Detail (Named Route)'),
             ),
             const SizedBox(height: 20),
-            // Tombol untuk named route ke SettingsScreen
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/settings', arguments: 'John Doe');
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 16),
-              ),
               child: const Text('Go to Settings'),
+            ),
+            const SizedBox(height: 20),
+            // ✅ Tombol Info Pengguna
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/infopengguna');
+              },
+              child: const Text('Go to Info Pengguna'),
             ),
           ],
         ),
@@ -105,20 +98,12 @@ class DetailScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Received Data: $data',
-              style: const TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
+            Text('Received Data: $data', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 16),
-              ),
               child: const Text('Go Back'),
             ),
           ],
@@ -128,7 +113,7 @@ class DetailScreen extends StatelessWidget {
   }
 }
 
-// Layar Pengaturan (SettingsScreen) - Tugas Tambahan
+// Layar Pengaturan (SettingsScreen)
 class SettingsScreen extends StatelessWidget {
   final String username;
 
@@ -136,7 +121,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mendapatkan argumen tambahan jika dikirim melalui pushNamed
     final args = ModalRoute.of(context)?.settings.arguments as String? ?? username;
 
     return Scaffold(
@@ -148,20 +132,48 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Username: $args',
-              style: const TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
+            Text('Username: $args', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 16),
-              ),
+              child: const Text('Go Back'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ✅ Layar Info Pengguna
+class InfoPengguna extends StatelessWidget {
+  const InfoPengguna({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const String nama = "Muhammad Sulthan Zharfan";
+    const String npm = "4522210016";
+    const String kota = "Bogor";
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Info Pengguna'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Nama: $nama', style: const TextStyle(fontSize: 18)),
+            Text('NPM : $npm', style: const TextStyle(fontSize: 18)),
+            Text('Kota: $kota', style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text('Go Back'),
             ),
           ],

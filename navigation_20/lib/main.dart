@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
 // Kelas untuk merepresentasikan data item
 class Item {
   final int id;
   final String name;
 
   Item({required this.id, required this.name});
+}
+
+void main() {
+  runApp(const MyApp());
 }
 
 // Aplikasi utama
@@ -57,9 +57,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       home: Navigator(
-        // Daftar pages didefinisikan secara deklaratif
         pages: [
-          // Selalu tampilkan HomeScreen
           MaterialPage(
             key: const ValueKey('HomeScreen'),
             child: HomeScreen(
@@ -67,7 +65,6 @@ class _MyAppState extends State<MyApp> {
               onItemSelected: _selectItem,
             ),
           ),
-          // Tampilkan DetailScreen jika ada item yang dipilih
           if (_selectedItem != null)
             MaterialPage(
               key: ValueKey(_selectedItem),
@@ -77,10 +74,8 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
         ],
-        // Menangani pop (kembali) dari tumpukan navigasi
         onPopPage: (route, result) {
           if (!route.didPop(result)) return false;
-          // Bersihkan item yang dipilih saat pop
           _clearSelection();
           return true;
         },
@@ -151,6 +146,10 @@ class DetailScreen extends StatelessWidget {
             ),
             Text(
               'ID: ${item.id}',
+              style: const TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Nama Item: ${item.name}',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
